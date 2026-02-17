@@ -1,0 +1,189 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <link rel="icon" type="image/png" href="./assets/favicon-96x96.png" sizes="96x96" />
+    <link rel="icon" type="image/svg+xml" href="./assets/favicon.svg" />
+    <link rel="shortcut icon" href="./assets/favicon.ico" />
+    <link rel="apple-touch-icon" sizes="180x180" href="./assets/apple-touch-icon.png" />
+    <link rel="manifest" href="./assets/site.webmanifest" />
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Fiebre</title>
+    
+    <style>
+        /* This section controls how things LOOK (CSS) */
+        
+        body {
+            background-color: black;    /* Sets the whole page to black */
+            color: white;               /* Sets all text to white */
+            font-family: Verdana,sans-serif;    /* Uses a clean, modern font */
+            margin: 40px;               /* Adds space around the edges of the page */
+            line-height: 1.6;           /* Adds space between lines of text for readability */
+            text-align: justify;
+        }
+
+        /* This is a 'Container' for your images to help with layouts */
+
+        /* 1. The Wrapper (The Parent) */
+        /* flexbox layout se supone que es la forma moderna de tener texto e imagenes en conjunto sin que se rompa todo*/
+    
+        .center-block {
+            margin: 0 auto;      /* centra el bloque de forma horizontal (auto centra la imagen horizontalmente) */
+            width: 60%;          /* Limits how wide the text block gets */
+            max-width: 800px;    /* Prevents it from getting too wide on huge monitors */
+            font-size: 16pt;
+        }
+        .sub-title-right {
+            text-align: right;   /* Aligns the text to the right side of the 60% block */
+            display: block;      /* Ensures it takes up the full width of the line */
+            font-style: italic; 
+        }
+        /* STYLE 2: The "Small & Centered" Image */
+        .image-below {
+            display: block;      /* Makes it act like a block (takes up its own line) */
+            margin: 30px auto;   /* 'auto' centers it horizontally; 30px adds vertical space */
+            width: 200px;        /* Fixed small size */
+        }
+        
+
+        /* esta es toda la magia de la diagonal que colorea el texto,aparentemente la propiedad linear gradient + el angulo (135) hacen este efecto, 
+        dps resta agregar los colores para cada porcion, 50/50 en este caso  lo falopa es que es un fondo, no es que le da color al texto. 
+        Las letras son transparentes y el fondo se vuelve blanco/rojo */
+
+       .diagonal-split-text {
+        /* This makes the "box" only as wide as your text, keeping the split centered
+        esto es necesario porque el párrafo se estira a lo ancho de toda la página, no dentro de un marco definido */
+            display: inline-block;
+
+        /* 1. Create the diagonal background */
+        /* 135deg creates that 'hypotenuse' angle from top-left to bottom-right and one code is for the white characters, the other for the red ones*/
+            background: linear-gradient(135deg, #ffffff 50%, #ff0000 50%);
+
+
+            /* esto la verdad no lo entiendo, si lo comento todo no cambia nada pero hay que ver que pasa si uno va agregándole cosas al fondo */
+            /* 2. The Magic: This clips the background to the text only 
+            This is a special command that tells the color: "Don't fill the whole rectangular box; only fill the pixels where a letter exists."*/
+            -webkit-background-clip: text;
+            background-clip: text;
+
+            /* 3. Make the actual text transparent so the background shows through */
+            color: transparent;
+
+            /* 4. Visual tweaks */
+            /* Paragraph styling */
+            font-size: 1.5rem;
+            line-height: 1.4;
+            margin: 20px 0;
+            font-weight: 700; /* Thicker text helps the effect stand out */
+        }  
+
+        /* esto hace la magia del texto en columnas tipo "diario" que está en cada capítulo */
+        .journal-block {
+            column-count: 2;        /* The magic line: splits text into 2 columns */
+            column-gap: 50px;       /* The space (gutter) between the two columns */
+            width: 70%;             /* Adjust this (60%, 50%, etc.) to make it skinnier */
+            margin: 0 auto;         /* Keeps the skinnier block centered on the screen */
+            text-align: justify;    /* Classic journal look: aligns text to both left and right */
+            hyphens: auto;          /* Prevents big ugly gaps by breaking long words with hyphens */
+            line-height: 1.8;
+            margin-bottom: 30px;
+        }
+
+        /* clave para customizar el espacio entre párrafos y así evitar el uso de saltos de línea como el br que es muy pronunciado 
+        también toquetié un poco la clase para no tener que repetir código */
+        .tight-gap { 
+            margin-bottom: 4px; /* A very subtle, small gap */
+            font-size: 16pt;
+            font-family: Verdana,sans-serif;
+            /* COLOR FUENTE*/
+            color: #8B0000 ;
+        }
+
+        /* idéntico a la clase de arriba pero con un espacio más grande entre párrafos */
+        .medium-gap {
+            margin-bottom: 20px; /* A standard, breathable gap */
+            font-size: 16pt;
+            font-family: Verdana,sans-serif;
+            /* COLOR FUENTE*/
+            color: #8B0000;
+        }
+
+        /* esto aplica para todos los headers tipo h2, es obvio que está mal pero bueno por ahora funciona */
+        h2 {
+            line-height: 1.2; /* distancia custom entre salto de linea con el br*/
+            margin-bottom: 20px; 
+            text-align: center; /* RECORDAR QUE ESTO CENTRA EL TEXTO */
+        }
+
+        .capitulo {
+            font-size: 18pt;
+            font-weight: bold;
+            font-family: Verdana,sans-serif;
+            text-align: left;
+        }
+
+        .binary-block {
+            text-align: center;
+            font-style: italic;
+            font-family: monospace;; /* Optional: binary looks great in fixed-width fonts */
+            color: white;            /* Optional: subtle grey looks more "hidden" */
+            line-height: 1.2;       /* Controls the gap between your binary lines */
+            margin: 20px auto;
+        }
+        .landing-image {
+            display: block;      /* fuerza a que la imagen definida como landing-image sea un bloque y no una linea */
+            margin: 100px auto 20px auto; /* esto en realidad sería 100px ARRIBA, auto ABAJO, 20px DERECHA, auto IZQUIERDA */
+                                        /* auto es la forma clásica de CENTRAR un bloque*/
+            max-width: 600px;    /* buen tamaño máximo para la imagen, así no se ve GIGANTE en un monitor grandote */
+            cursor: pointer;     /* cambia el cursor a una manita */
+            transition: 0.3s;    /* se toma 3 segundos en animar el efecto de hover (que se agrande) - este efecto está definido más abajo */
+        }
+
+        .landing-image:hover {
+            opacity: 0.7;        /* le baja la opacidad a la imagen (la hace más transparente) */
+            transform: scale(1.02); /* hace que la imagen se haga levemente más grande */
+        }
+
+    </style>
+</head>
+<body>
+
+    <h1 style="font-size: 24pt;">I N V O C A C I Ó N</h1>
+
+<div class="center-block"> 
+        <!-- se lee raro pero el br le agrega el salto de línea para que quede como el word -->
+        <h2 style="text-align: center; font-size: 48pt;"><strong> I N V O C A </strong><br>
+        C I Ó N
+        </h2>
+    <span class="sub-title-right">[Situación 0]</span>
+    <p class="tight-gap">Hace aproximadamente doscientos años, la historia llegó a su fin. 
+        Sin embargo, las puertas del cielo no se abrieron. En los albores del nacimiento de la </span><em>Nueva Carne</em>, 
+        un virus se propagó entre los circuitos del espécimen naciente. El poder cósmico de </span><em>Cthonos</span></em>, 
+        enviado desde el reverso del mundo, cayó sobre nosotros como un pesado manto y lo nubló todo.</span></p>
+        <p class="tight-gap">Esta vez, esa entidad monstruosa no fue invocada con los antiguos poderes arcanos y, por eso mismo, tampoco sirven las viejas defensas. 
+        El capital, uno de los tantos rostros de <em>Cthonos</em>, 
+        se propagó a través del ciberespacio: circuitos recalentados, máquinas oxidadas y chatarra fueron su cuerpo. </p>
+        <p class="medium-gap">La infiltración psíquica del capital se extendió como larvas por nuestros ojos y nuestros oídos y, como un hongo o un tumor, empezó a anidar en nuestra psiquis. 
+        Es omnipresente pero invisible. Solo podemos intuirla en destellos fugaces, en pequeñas inconsistencias que revelan que el mundo está siendo carcomido desde sus cimientos.
+        <p class="medium-gap">Ha pasado ya más de medio siglo desde que se produjo el <em>Gran Desgarro</em> sobre el tejido de la <em>Nueva Carne</em>.</p>
+        <p class="medium-gap">El mundo hoy luce como un cúmulo de carne mutilada, despojos apilados que construyen, entre fragmentos, un engendro semi-humano. 
+            La totalidad fue desgarrada en trozos cada vez más pequeños, separados por una nada que se expande y los aleja cada vez más. 
+            La voracidad del capital fragmenta y consume esta carne, que también es la suya, precipitándose de lleno al vacío, acercándose a la Singularidad, al punto de no retorno. 
+            Como Erisictón, castigado por los dioses a tener un hambre infinita, Cthonos terminará por devorarse también a sí mismo.</p>
+         <!-- creo que acá me conviene hacer esto a manopla en vez de usar otra clase porque es super específico para esta situación puntual -->
+         <p style="text-align: right; display: block; font-family: Verdana,sans-serif;margin-bottom: 4px; font-size: 12pt;" >Autofluxión patológica.</p>
+         <p style="text-align: center; display: block; font-family: Verdana,sans-serif;margin-bottom: 4px; font-size: 12pt;" >Ouroboro trans-sintético.</p>
+         <p style="text-align: left; display: block; font-family: Verdana,sans-serif;margin-bottom: 20px; font-size: 12pt;" >Ontofagia digital.</p>
+         <p class="tight-gap">El tiempo se curvó sobre sí, conformando un bucle que parece no tener salida. Vivimos el eterno retorno de lo nuevo. 
+            Todo cambia a ritmos vertiginosos, en una modernidad líquida en la que nada permanece estable pero, sin embargo, en la que parece imposible imaginar una novedad radical. 
+            Un ataque DDOS teledirigido por milicias digitales que satura los servidores con tráfico basura.</p>
+        <p class="tight-gap">El fin de la historia, del arte y de las ideologías, nos llevó a la orilla del mundo. Más allá, no hay nada.</p>
+        <br>
+        <a href="manifiesto.html" style="text-decoration: none; color: white;"> 
+
+            <img src="./assets/meme-disco-elysium.jpeg" class="landing-image">
+    
+        </a>
+</div>
+</body>
+</html>
